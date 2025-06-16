@@ -1,16 +1,19 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
+import Hello from "./components/Hello-function";
+import Message from "./components/Message";
 
+/*
+  You can use <Hello /> more than once in App: each instance renders independently.
+  You can also render <Message /> directly in App; it works exactly the same, it’ll just render the "What a beautiful day!" paragraph at that location.
+*/
 function App() {
-  
-
   return (
     <>
-      <p>Hello, world!</p>
+      <div>
+        <Hello></Hello>
+      </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
