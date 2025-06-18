@@ -1,7 +1,11 @@
-function Message() {
-     return (
-    <p>What a beautiful day!</p>
-  );
+function Message({age}) {
+return(
+<>
+        <p> 
+        {age > 18? `Your age is ${age}`: "You are very young!"}
+         </p>
+</>
+)
 }
 
 export default Message
