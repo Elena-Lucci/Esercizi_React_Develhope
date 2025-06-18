@@ -1,6 +1,6 @@
 import React from "react";
-import Hello from "./components/Hello-function";
-import Message from "./components/Message";
+import Welcome from "./components/Welcome";
+import Age from "./components/Age";
 
 /*
   You can use <Hello /> more than once in App: each instance renders independently.
@@ -10,7 +10,7 @@ function App() {
   return (
     <>
       <div>
-        <Hello></Hello>
+      <Welcome name = {<strong>Elena</strong>} age={27} ></Welcome>
       </div>
     </>
   );
