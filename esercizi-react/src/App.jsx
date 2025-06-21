@@ -12,7 +12,7 @@ function App() {
   };
   return (
     <>
-      <Counter></Counter>
+      <Counter initialValue={0} incrementAmount={1}></Counter>
     </>
   )
 }
