@@ -7,9 +7,6 @@ import { CounterDisplay } from './Components/CounterDisplay'
 
 function App() {
   
-  const handleAlertTime = () => {
-    alert(`Current time is ${new Date().toLocaleTimeString()}`);
-  };
   return (
     <>
       <Counter initialValue={0} incrementAmount={1}></Counter>

@@ -4,6 +4,8 @@ import { CounterDisplay } from "./CounterDisplay";
 export function Counter({ initialValue = 0, incrementAmount = 1 }) {
   const [counter, setCounter] = useState(initialValue);
 
+  //non c'è differenza tra passare l'initialValue come props come fatto qui da me, o mettere useState(initialValue || 0).
+
   const incrementCounter = () => {
     setCounter(prev => prev + incrementAmount) ;
   };
