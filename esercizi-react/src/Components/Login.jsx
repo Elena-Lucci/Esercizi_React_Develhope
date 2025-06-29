@@ -1,32 +1,79 @@
-import React, { useState } from 'react';
+import { useState } from "react";
 
 export function Login({ onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [remember, setRemember] = useState(false);
 
-  // Stile dinamico del button Login
-  const loginButtonStyle = {
+     const loginButtonStyle = {
     backgroundColor: password.length < 8 ? 'red' : 'green',
+    color: '#fff',
+  };
+
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleRememberChange = (e) => {
+    setRemember(e.target.checked);
   };
 
   const handleLogin = (e) => {
-  e.preventDefault();                   // impedisce il refresh della pagina
-  onLogin({                             // chiama la prop onLogin passando lo stato
-    username,
-    password,
-    remember,
-  });
-  console.log('Login dati:', { username, password, remember });
-};
+    // Prevent default form submission behavior
+    e.preventDefault();
+    onLogin({ username, password, remember });
+    console.log({ username, password, remember });
+  };
+
+  const handleReset = () => {
+    setUsername('');
+    setPassword('');
+    setRemember(false);
+  };
+
+  const isDisabled = username === '' || password === '';
 
   return (
     <form onSubmit={handleLogin}>
-
-      <button
-        type="submit"
-        disabled={username === '' || password === ''}
-        style={loginButtonStyle}
-      > Login
+      <div>
+        <label>
+          Username:
+          <input
+            type="text"
+            value={username}
+            onChange={handleUsernameChange}
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Password:
+          <input
+            type="password"
+            value={password}
+            onChange={handlePasswordChange}
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Remember me:
+          <input
+            type="checkbox"
+            checked={remember}
+            onChange={handleRememberChange}
+          />
+        </label>
+      </div>
+      <button type="submit" disabled={isDisabled} style={loginButtonStyle}>
+        Login
+      </button>
+      <button type="button" onClick={handleReset}>
+        Reset
       </button>
     </form>
   );
