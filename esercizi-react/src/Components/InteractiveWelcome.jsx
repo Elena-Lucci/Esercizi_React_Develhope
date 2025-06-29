@@ -1,3 +1,6 @@
+import { Welcome } from "./Welcome";
+import { useState } from "react";
+
 export function InteractiveWelcome() {
   const [name, setName] = useState('');
 
