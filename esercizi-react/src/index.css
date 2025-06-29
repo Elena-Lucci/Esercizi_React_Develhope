@@ -13,6 +13,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.welcome {
+  background-color: #e0f7fa;
+  border: 1px solid #00796b;
+}
+
+
 a {
   font-weight: 500;
   color: #646cff;
