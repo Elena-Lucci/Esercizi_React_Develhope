@@ -7,7 +7,7 @@
 import React, { useEffect, useRef } from "react";
 
 export function MountLogger() {
-  // È un ref che mantiene un valore booleano tra i render, inizialmente false.
+  // È un ref inizialmente false.
   const hasLogged = useRef(false);
 
   useEffect(() => {
