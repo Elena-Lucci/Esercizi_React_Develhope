@@ -1,6 +1,6 @@
 import React from "react";
 import Welcome from "./components/Welcome";
-import Counter from "./components/Counter";
+import { Counter } from "./Components/Counter";
 import GithubUsers from "./components/GithubUserList";
 import ShowGithubUser from "./components/GithubUser";
 import NotFound from "./components/NotFound";
@@ -21,14 +21,14 @@ function App() {
 
     {/* Modify App component that wraps a Routes component and add a single Route to the / path that renders the Welcome component, passing it a name prop.*/}
       <Routes>
-        <Route path="/" element={<Welcome name={<strong>Elena</strong>}/>} />
+        <Route path="/" element={<Welcome name={"Elena"} age={27}/>} />
         <Route path="/counter" element={<Counter />} />
 
         {/* Add a new Route to the /counter path that renders the Counter component from the first state exercise. */}
         <Route path="/users" element={<GithubUsers />}
         >
           {/* Add a new Route to the users/:username path that renders a ShowGithubUser component that receives the username as a path parameter and renders a GithubUser component by passing it the received username. */}
-          <Route path=":username" element={<ShowGithubUser />} />
+          <Route path="/users/:username" element={<ShowGithubUser />} />
         </Route>
 
         {/* Add a Not Found route that renders when a user navigates to a path that does not exist. */}
