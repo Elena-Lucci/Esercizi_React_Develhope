@@ -1,90 +1,82 @@
-import { useState, useEffect, useRef } from 'react'
-import ChatMessage from './Components/ChatMessage'
-import './App.css'
+import { useState, useEffect, useRef } from 'react';
+import ChatMessage from './Components/ChatMessage';
+import useSWR from 'swr';
+import './App.css';
+
+// Endpoint mock
+const MOCK_ENDPOINT = 'https://mocki.io/v1/6585442b-234d-4508-9f40-b193e6f1d0d3';
+
+// Funzione fetch da usare con SWR
+const fetcher = (url) => fetch(url).then(res => res.json());
 
 function App() {
   const [messages, setMessages] = useState([
-    { text: 'Ciao! Come stai? Vieni ad arrampicare questa sera?', sender: 'other' },
-    { text: 'Tutto bene, grazie! E tu? Guarda, non saprei, a che ora andate?', sender: 'me' },
-    { text: 'Bene anche io, pensavo dopo le 18:00', sender: 'other' },
-    { text: 'Perfetto, verso le 15:00 ti do conferma, ma penso di potere!', sender: 'me' },
-  ])
+    { text: 'Ciao! Come stai?', sender: 'other' },
+  ]);
+  const [message, setMessage] = useState('');
+  const [shouldFetch, setShouldFetch] = useState(false);
+  const chatEndRef = useRef(null);
 
-  const [message, setMessage] = useState("")
-  const chatEndRef = useRef(null)
+  // Hook SWR personalizzato: attivato solo quando shouldFetch === true
+  const { data, error } = useSWR(shouldFetch ? MOCK_ENDPOINT : null, fetcher, {
+    revalidateOnFocus: false,
+  });
 
-  const pageStyle = {
-    height: '100vh',
-    margin: 0,
-    padding: 0,
-    backgroundColor: '#f2f2f2',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }
+  // Quando arriva una nuova risposta dal bot
+  useEffect(() => {
+    if (data?.reply) {
+      setMessages(prev => [...prev, { text: data.reply, sender: 'other' }]);
+      setShouldFetch(false); // reset
+    }
+  }, [data]);
 
-  const chatContainer = {
-    width: '100%',
-    maxWidth: '400px',
-    height: '500px',
-    backgroundColor: '#fff',
-    padding: '16px',
-    borderRadius: '8px',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-    display: 'flex',
-    flexDirection: 'column',
-  }
-
-  const chatHistoryStyle = {
-    flex: 1,
-    overflowY: 'auto',
-    marginBottom: '8px',
-  }
+  // Auto scroll in fondo
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   function handleInvia(event) {
-    event.preventDefault()
-    const trimmed = message.trim()
-    if (!trimmed) return
-    setMessages(prev => [...prev, { text: trimmed, sender: 'me' }])
-    setMessage("")
+    event.preventDefault();
+    const trimmed = message.trim();
+    if (!trimmed) return;
+
+    // Aggiungi messaggio utente
+    setMessages(prev => [...prev, { text: trimmed, sender: 'me' }]);
+    setMessage('');
+    setShouldFetch(true); // Attiva SWR per ottenere la risposta del bot
   }
-
-  function handleChange(event) {
-    setMessage(event.target.value)
-  }
-
-  // Auto scroll
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
-
-  // Simulated incoming messages
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setMessages(prev => [...prev, { text: 'hei', sender: 'other' }])
-    }, 10000)
-
-    return () => clearInterval(interval)
-  }, [])
 
   return (
-    <div style={pageStyle}>
-      <div style={chatContainer}>
-        
-        {/* Chat history */}
-        <div style={chatHistoryStyle}>
+    <div style={{
+      height: '100vh',
+      backgroundColor: '#f2f2f2',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>
+      <div style={{
+        width: '100%',
+        maxWidth: '400px',
+        height: '500px',
+        backgroundColor: '#fff',
+        padding: '16px',
+        borderRadius: '8px',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
+        <div style={{ flex: 1, overflowY: 'auto', marginBottom: '8px' }}>
           {messages.map((msg, index) => (
             <ChatMessage key={index} message={msg} />
           ))}
           <div ref={chatEndRef} />
         </div>
 
-        {/* Input area */}
         <form onSubmit={handleInvia} style={{ display: 'flex' }}>
           <input
             type="text"
             value={message}
-            onChange={handleChange}
+            onChange={(e) => setMessage(e.target.value)}
             placeholder="Scrivi un messaggio..."
             style={{
               flex: 1,
@@ -107,10 +99,9 @@ function App() {
             Invia
           </button>
         </form>
-
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
