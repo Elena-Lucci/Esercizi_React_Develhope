@@ -1,6 +1,4 @@
-// Single chat message bubble
 function ChatMessage({ message }) {
-
   const isSent = message.sender === 'me';
 
   const containerStyle = {
@@ -24,4 +22,4 @@ function ChatMessage({ message }) {
   );
 }
 
-export default ChatMessage
+export default ChatMessage;

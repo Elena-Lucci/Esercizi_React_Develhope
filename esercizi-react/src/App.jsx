@@ -1,8 +1,6 @@
-import { useState, useEffect} from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect, useRef } from 'react'
 import ChatMessage from './Components/ChatMessage'
+import './App.css'
 
 function App() {
   const [messages, setMessages] = useState([
@@ -28,14 +26,19 @@ function App() {
   const chatContainer = {
     width: '100%',
     maxWidth: '400px',
-    height: '500px',          // altezza fissa per il container della chat
+    height: '500px',
     backgroundColor: '#fff',
     padding: '16px',
     borderRadius: '8px',
     boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
     display: 'flex',
     flexDirection: 'column',
-    overflowY: 'auto',       // consente lo scroll
+  }
+
+  const chatHistoryStyle = {
+    flex: 1,
+    overflowY: 'auto',
+    marginBottom: '8px',
   }
 
   function handleInvia(event) {
@@ -50,12 +53,12 @@ function App() {
     setMessage(event.target.value)
   }
 
-  // Scroll to bottom whenever messages change
+  // Auto scroll
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  // Simulate incoming messages (optional)
+  // Simulated incoming messages
   useEffect(() => {
     const interval = setInterval(() => {
       setMessages(prev => [...prev, { text: 'hei', sender: 'other' }])
@@ -67,24 +70,45 @@ function App() {
   return (
     <div style={pageStyle}>
       <div style={chatContainer}>
-        {messages.map((msg, index) => (
-          <ChatMessage key={index} message={msg} />
-        ))}
-        <div ref={chatEndRef} />
-      </div>
+        
+        {/* Chat history */}
+        <div style={chatHistoryStyle}>
+          {messages.map((msg, index) => (
+            <ChatMessage key={index} message={msg} />
+          ))}
+          <div ref={chatEndRef} />
+        </div>
 
-      <form onSubmit={handleInvia} style={{ display: 'flex', marginTop: '8px' }}>
-        <input
-          type="text"
-          value={message}
-          onChange={handleChange}
-          placeholder="Scrivi un messaggio..."
-          style={{ flex: 1, padding: '8px', borderRadius: '16px', border: '1px solid #ccc' }}
-        />
-        <button type='submit' style={{ marginLeft: '8px', padding: '8px 16px', borderRadius: '16px', backgroundColor: '#007aff', color: '#fff', border: 'none' }}>
-          Invia
-        </button>
-      </form>
+        {/* Input area */}
+        <form onSubmit={handleInvia} style={{ display: 'flex' }}>
+          <input
+            type="text"
+            value={message}
+            onChange={handleChange}
+            placeholder="Scrivi un messaggio..."
+            style={{
+              flex: 1,
+              padding: '8px',
+              borderRadius: '16px',
+              border: '1px solid #ccc'
+            }}
+          />
+          <button
+            type="submit"
+            style={{
+              marginLeft: '8px',
+              padding: '8px 16px',
+              borderRadius: '16px',
+              backgroundColor: '#007aff',
+              color: '#fff',
+              border: 'none'
+            }}
+          >
+            Invia
+          </button>
+        </form>
+
+      </div>
     </div>
   )
 }
